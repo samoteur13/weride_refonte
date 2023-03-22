@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +21,7 @@ class AppController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'profil')]
+    #[Route('/profil/{id}', name: 'profil')]
     public function profil(EntityManagerInterface $entityManager, $id): Response
     {
         $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id ]);
@@ -29,4 +30,5 @@ class AppController extends AbstractController
             'user' => $user
         ]);
     }
+
 }
