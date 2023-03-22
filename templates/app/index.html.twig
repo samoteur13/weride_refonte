@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!
+{% endblock %}
+
+{% block body %}
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
+
+	<div class="example-wrapper">
+		{% for user in users %}
+			<div>
+				<h2><a href="{{ path('profil', { 'id': user.id }) }}"> {{ user.firstname }} {{user.lastname}} {{user.pseudo}} </a></h2>
+				<h3>Motos</h2>
+				<ul>
+					{% for bike in user.bikes %}
+						<p>
+							<b>{{bike.name}}</b>
+							{{bike.power}}
+							cc
+						</p>
+					{% endfor %}
+				</ul>
+                <h3>Sortie</h3>
+                <ul>
+                    {% for trip in user.trips %}
+                        <h3> {{trip.title}} </h3>
+                        <p> {{trip.description}} </p>
+                        <p> {{trip.type}} </p>
+                        <p> Départ : {{trip.startdate|date("d/m/y")}} </p>
+                        <p> Retour : {{trip.endDate|date("d/m/y")}} </p>
+                        <h4>Etapes</h4>
+                            <ul>
+                                {% for tripStep in trip.tripSteps %}
+                                    <li>
+                                        {{tripStep.city}} <span>{{tripStep.additionaladress}} </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>   
+                    {% endfor %}
+                </ul>
+			
+			</div>
+            <hr>
+		{% endfor %}
+	</div>
+{% endblock %}

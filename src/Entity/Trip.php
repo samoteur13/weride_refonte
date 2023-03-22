@@ -15,7 +15,7 @@ class Trip
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
@@ -40,14 +40,14 @@ class Trip
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rider')]
     private Collection $rider;
 
-    // #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'post')]
-    // private Collection $post;
+    #[ORM\OneToMany(mappedBy: 'trip_id', targetEntity: Post::class)]
+    private Collection $posts;
 
     public function __construct()
     {
         $this->tripSteps = new ArrayCollection();
         $this->rider = new ArrayCollection();
-        // $this->post = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,27 +181,34 @@ class Trip
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, User>
-    //  */
-    // public function getPost(): Collection
-    // {
-    //     return $this->post;
-    // }
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
 
-    // public function addPost(User $post): self
-    // {
-    //     if (!$this->post->contains($post)) {
-    //         $this->post->add($post);
-    //     }
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setTripId($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removePost(User $post): self
-    // {
-    //     $this->post->removeElement($post);
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getTripId() === $this) {
+                $post->setTripId(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
+
 }
