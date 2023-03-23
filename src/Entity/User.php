@@ -50,22 +50,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trip::class)]
     private Collection $trips;
 
-    #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'rider')]
-    private Collection $rider;
-
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Post::class)]
     private Collection $posts;
 
-    // #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'post')]
-    // private Collection $post;
+    #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'rider_join')]
+    private Collection $rider_trips;
+
 
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
         $this->trips = new ArrayCollection();
-        $this->rider = new ArrayCollection();
-        // $this->post = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->rider_trips = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,60 +256,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Trip>
-     */
-    public function getRider(): Collection
-    {
-        return $this->rider;
-    }
-
-    public function addRider(Trip $rider): self
-    {
-        if (!$this->rider->contains($rider)) {
-            $this->rider->add($rider);
-            $rider->addRider($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRider(Trip $rider): self
-    {
-        if ($this->rider->removeElement($rider)) {
-            $rider->removeRider($this);
-        }
-
-        return $this;
-    }
-
-    // /**
-    //  * @return Collection<int, Trip>
-    //  */
-    // public function getPost(): Collection
-    // {
-    //     return $this->post;
-    // }
-
-    // public function addPost(Trip $post): self
-    // {
-    //     if (!$this->post->contains($post)) {
-    //         $this->post->add($post);
-    //         $post->addPost($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removePost(Trip $post): self
-    // {
-    //     if ($this->post->removeElement($post)) {
-    //         $post->removePost($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    /**
      * @return Collection<int, Post>
      */
     public function getPosts(): Collection
@@ -337,6 +280,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($post->getUserId() === $this) {
                 $post->setUserId(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trip>
+     */
+    public function getRiderTrips(): Collection
+    {
+        return $this->rider_trips;
+    }
+
+    public function addRiderTrip(Trip $riderTrip): self
+    {
+        if (!$this->rider_trips->contains($riderTrip)) {
+            $this->rider_trips->add($riderTrip);
+            $riderTrip->addRiderJoin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRiderTrip(Trip $riderTrip): self
+    {
+        if ($this->rider_trips->removeElement($riderTrip)) {
+            $riderTrip->removeRiderJoin($this);
         }
 
         return $this;

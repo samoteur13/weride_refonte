@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserFormType;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,21 +13,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SubscribeController extends AbstractController
 {
     #[Route('/subscribe', name: '/subscribe')]
-    public function index(Request $request ): Response
+    public function index(Request $request , EntityManager $manager): Response
     {
         
         // $role = array("'roles' : 'ROLE_USER'");
         $user = new User();
         $user->setRoles([]);
-        // dd($user);
         $form = $this->createForm(UserFormType::class,$user);
 
+        //handleRequest va faire matcher les element la class user pour les ajouter
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $user = $form->getData();
 
+        //si le formulaire est envoyer et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            dd($user);
+            $user = $form->getData();
+            $manager->persist($user);
+            $manager->flush();
             // ... perform some action, such as saving the task to the database
 
             return $this->redirectToRoute('task_success');

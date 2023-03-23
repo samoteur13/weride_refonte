@@ -1,0 +1,72 @@
+{% block user %}
+	<div>
+		<div class="example-wrapper">
+			<div>
+				<h2>Profile de {{user.pseudo}} </h2>
+				<h3>Motos</h2>
+				<ul>
+					{% for bike in user.bikes %}
+						<p>
+							<b>{{bike.name}}</b>
+							{{bike.power}}
+							cc
+						</p>
+						<br/>
+					{% endfor %}
+					<hr/>
+				</ul>
+				<h3>Sortie</h3>
+				<ul>
+					{% for trip in user.trips %}
+						<h3>
+							{{trip.title}}
+						</h3>
+						<p>
+							{{trip.description}}
+						</p>
+						<p>
+							{{trip.type}}
+						</p>
+						<p>
+							Départ :
+							{{trip.startdate|date("d/m/y")}}
+						</p>
+						<p>
+							Retour :
+							{{trip.endDate|date("d/m/y")}}
+						</p>
+						<h4>Etapes</h4>
+						<ul>
+							{% for tripStep in trip.tripSteps %}
+								<li>
+									{{tripStep.city}}
+									<span>{{tripStep.additionaladress}}
+									</span>
+								</li>
+							{% endfor %}
+							<hr />
+						</ul>
+						<h4>Rider</h4>
+						<ul>
+							{% for rider in trip.riderjoin %}
+								<li>{{rider.pseudo}}</li>
+							{% endfor %}
+							<hr />
+						</ul>
+						<h4>Commentaire</h4>
+						{% for post in trip.posts %}
+							<h5>{{ post.userid.firstname }}</h5>
+							<p>
+								{{post.content}}
+							</p>
+							<hr />
+						{% endfor %}
+						<hr />
+						<br/>
+					{% endfor %}
+				</ul>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}

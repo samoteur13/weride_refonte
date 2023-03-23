@@ -4,31 +4,37 @@ namespace App\DataFixtures;
 
 
 
-use Faker\Factory;
+use Faker;
 use App\Entity\Bike;
+use App\Entity\Post;
 use App\Entity\Trip;
+use App\Entity\TripSteps;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+
 
 class UserFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {   
-        $faker = Factory::create('fr_FR');
+        $faker = Faker\Factory::create('fr_FR');
+
         $users = [];
         $bikes = [];
-        // $trips = [];
+        $trips = [];
+        $posts = [];
+        $trip_steps = [];
+
 
         $mark_bikes = ['Yamaha', 'Honda', 'Suziki', 'Ninja'];
             for ($i=0; $i < 5 ; $i++) { 
-              
                 $users[$i] = new User();
                 $users[$i]->setEmail($faker->email);
                 $users[$i]->setRoles([]);
                 $users[$i]->setFirstname($faker->firstname);
                 $users[$i]->setLastname($faker->lastName);
-                $users[$i]->setPseudo($faker->tld );
+                $users[$i]->setPseudo($faker->userName  );
                 $users[$i]->setPassword($faker->password);
 
                 for ($i1=0; $i1 < rand(1, 2) ; $i1++) { 
@@ -40,15 +46,42 @@ class UserFixtures extends Fixture
                     $manager->persist($bikes[$i1]);
                 }
 
-                // for ($i2=0; $i2 < rand(0,2) ; $i2++) { 
-                //     // $maintenant = new DateTime();
-                //     $trips[$i2] = new Trip() ;
-                //     $trips[$i2]->setTitle($faker->title) ;
-                //     $trips[$i2]->setStartDate($maintenant) ;
-                //     $trips[$i2]->setEndDate($maintenant) ;
-                //     $trips[$i2]->setDescription($faker->sentence($nbWords = rand(10,20), $variableNbWords = true) ) ;
-                //     $trips[$i2]->setDescription($users[$i]) ;
-                // }
+                for ($i2=0; $i2 < rand(1,2) ; $i2++) { 
+                    $date = new \DateTime;
+                    $trips[$i2] = new Trip() ;
+                    $trips[$i2]->setTitle($faker->name) ;
+                    $trips[$i2]->setStartDate($date) ;
+                    $trips[$i2]->setEndDate($date) ;
+                    $trips[$i2]->setType('gzz');
+                    $trips[$i2]->setDescription("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab eius laboriosam molestiae, distinctio eos modi? Mollitia, itaque sequi deserunt nobis eos et incidunt dolore corrupti voluptatum dicta culpa, voluptate illum." ) ;
+                    $trips[$i2]->setUser($users[$i]) ;
+
+                    for ($i3=0; $i3 < rand(1,4) ; $i3++) { 
+                        $trips[$i2]->addRiderJoin($users[$i]) ;
+                    }
+
+                    $manager->persist( $trips[$i2]);
+                    
+                    for ($i4=0; $i4 < rand(1,4) ; $i4++) { 
+                       $posts[$i4] = new Post();
+                       $posts[$i4]->setContent( 'Lorem ipsum dolor sit amet, consectetur adipiscing');
+                       $posts[$i4]->setTripId($trips[$i2]);
+                       $posts[$i4]->setUserId($users[$i]);
+                       $manager->persist($posts[$i4]);
+                    }
+
+                    for ($i5=0; $i5 < rand(2,3) ; $i5++) { 
+                        $trip_steps[$i5] = new TripSteps;
+                        $trip_steps[$i5]->setCity($faker->city);
+                        $trip_steps[$i5]->setAdditionalAdress($faker->streetAddress);
+                        $trip_steps[$i5]->setLongitude(0.0);
+                        $trip_steps[$i5]->setLatitude(0.0);
+                        $trip_steps[$i5]->setTrip($trips[$i2]);
+                        $manager->persist($trip_steps[$i5]);
+                    }
+
+                }
+
 
                 $manager->persist($users[$i]);
             }

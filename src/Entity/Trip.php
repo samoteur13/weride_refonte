@@ -37,17 +37,17 @@ class Trip
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripSteps::class)]
     private Collection $tripSteps;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rider')]
-    private Collection $rider;
-
     #[ORM\OneToMany(mappedBy: 'trip_id', targetEntity: Post::class)]
     private Collection $posts;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rider_trips')]
+    private Collection $rider_join;
 
     public function __construct()
     {
         $this->tripSteps = new ArrayCollection();
-        $this->rider = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->rider_join = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,30 +158,6 @@ class Trip
     }
 
     /**
-     * @return Collection<int, User>
-     */
-    public function getRider(): Collection
-    {
-        return $this->rider;
-    }
-
-    public function addRider(User $rider): self
-    {
-        if (!$this->rider->contains($rider)) {
-            $this->rider->add($rider);
-        }
-
-        return $this;
-    }
-
-    public function removeRider(User $rider): self
-    {
-        $this->rider->removeElement($rider);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Post>
      */
     public function getPosts(): Collection
@@ -207,6 +183,30 @@ class Trip
                 $post->setTripId(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getRiderJoin(): Collection
+    {
+        return $this->rider_join;
+    }
+
+    public function addRiderJoin(User $riderJoin): self
+    {
+        if (!$this->rider_join->contains($riderJoin)) {
+            $this->rider_join->add($riderJoin);
+        }
+
+        return $this;
+    }
+
+    public function removeRiderJoin(User $riderJoin): self
+    {
+        $this->rider_join->removeElement($riderJoin);
 
         return $this;
     }
