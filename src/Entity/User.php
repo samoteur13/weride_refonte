@@ -65,6 +65,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->rider_trips = new ArrayCollection();
     }
 
+    // public function __toString()
+    // {
+    //     return $this->bikes;
+    //     return $this->trips;
+    //     return $this->posts;
+    //     return $this->rider_trips;
+    // }
+
     public function getId(): ?int
     {
         return $this->id;

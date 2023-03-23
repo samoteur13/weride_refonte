@@ -28,13 +28,14 @@ class UserFixtures extends Fixture
 
 
         $mark_bikes = ['Yamaha', 'Honda', 'Suziki', 'Ninja'];
+        $type = ['pepere','normal','plain gaz'];
             for ($i=0; $i < 5 ; $i++) { 
                 $users[$i] = new User();
                 $users[$i]->setEmail($faker->email);
                 $users[$i]->setRoles([]);
                 $users[$i]->setFirstname($faker->firstname);
                 $users[$i]->setLastname($faker->lastName);
-                $users[$i]->setPseudo($faker->userName  );
+                $users[$i]->setPseudo($faker->userName);
                 $users[$i]->setPassword($faker->password);
 
                 for ($i1=0; $i1 < rand(1, 2) ; $i1++) { 
@@ -50,10 +51,10 @@ class UserFixtures extends Fixture
                     $date = new \DateTime;
                     $trips[$i2] = new Trip() ;
                     $trips[$i2]->setTitle($faker->name) ;
-                    $trips[$i2]->setStartDate($date) ;
-                    $trips[$i2]->setEndDate($date) ;
-                    $trips[$i2]->setType('gzz');
-                    $trips[$i2]->setDescription("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab eius laboriosam molestiae, distinctio eos modi? Mollitia, itaque sequi deserunt nobis eos et incidunt dolore corrupti voluptatum dicta culpa, voluptate illum." ) ;
+                    $trips[$i2]->setStartDate($faker->dateTime()) ;
+                    $trips[$i2]->setEndDate($faker->dateTime()) ;
+                    $trips[$i2]->setType($type[rand(0,2)]);
+                    $trips[$i2]->setDescription( $faker->text()) ;
                     $trips[$i2]->setUser($users[$i]) ;
 
                     for ($i3=0; $i3 < rand(1,4) ; $i3++) { 
@@ -64,7 +65,7 @@ class UserFixtures extends Fixture
                     
                     for ($i4=0; $i4 < rand(1,4) ; $i4++) { 
                        $posts[$i4] = new Post();
-                       $posts[$i4]->setContent( 'Lorem ipsum dolor sit amet, consectetur adipiscing');
+                       $posts[$i4]->setContent( $faker->text());
                        $posts[$i4]->setTripId($trips[$i2]);
                        $posts[$i4]->setUserId($users[$i]);
                        $manager->persist($posts[$i4]);

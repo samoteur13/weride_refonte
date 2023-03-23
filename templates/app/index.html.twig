@@ -30,26 +30,7 @@
 							cc
 						</p>
 					{% endfor %}
-				</ul>
-                <h3>Sortie</h3>
-                <ul>
-                    {% for trip in user.trips %}
-                        <h3> {{trip.title}} </h3>
-                        <p> {{trip.description}} </p>
-                        <p> {{trip.type}} </p>
-                        <p> Départ : {{trip.startdate|date("d/m/y")}} </p>
-                        <p> Retour : {{trip.endDate|date("d/m/y")}} </p>
-                        <h4>Etapes</h4>
-                            <ul>
-                                {% for tripStep in trip.tripSteps %}
-                                    <li>
-                                        {{tripStep.city}} <span>{{tripStep.additionaladress}} </span>
-                                    </li>
-                                {% endfor %}
-                            </ul>   
-                    {% endfor %}
-                </ul>
-			
+				</ul>	
 			</div>
             <hr>
 		{% endfor %}

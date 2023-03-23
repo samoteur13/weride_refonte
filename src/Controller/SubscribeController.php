@@ -30,9 +30,8 @@ class SubscribeController extends AbstractController
             $user = $form->getData();
             $manager->persist($user);
             $manager->flush();
-            // ... perform some action, such as saving the task to the database
 
-            return $this->redirectToRoute('task_success');
+            return $this->redirectToRoute('/home');
         }
 
         return $this->render('subscribe/index.html.twig', [
