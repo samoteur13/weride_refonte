@@ -13,7 +13,10 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['user']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,6 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user','write'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -31,25 +35,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['bike','user','write'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['bike','user','write'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('bike')]
+    #[Groups(['bike','user','write'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('bike')]
+    #[Groups(['bike','user','write'])]
     private ?string $avatar = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user','write'])]
     private array $pictures = [];
 
+    #[Groups(['user','write'])]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Bike::class)]
     private Collection $bikes;
 

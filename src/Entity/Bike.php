@@ -10,25 +10,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: BikeRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['bike']],
-    denormalizationContext: ['groups' => ['write']],
+    denormalizationContext: ['groups' => ['write','bike']],
 )]
 class Bike
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['write','bike'])]
+    #[Groups(['write','bike','user'])]
     private ?int $id = null;
 
-    #[Groups([ 'write','bike'])]
+    #[Groups([ 'write','bike','user'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['write','bike'])]
+    #[Groups(['write','bike','user'])]
     #[ORM\Column]
     private ?int $power = null;
 
-    #[Groups(['write','bike'])]
+    #[Groups(['write','bike','user'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img_bike = null;
 
