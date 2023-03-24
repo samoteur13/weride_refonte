@@ -39,19 +39,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','user','write'])]
+    #[Groups(['bike','user','write','trip'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','user','write'])]
+    #[Groups(['bike','trip','user','write'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','user','write'])]
+    #[Groups(['bike','trip','user','write'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['bike','user','write'])]
+    #[Groups(['bike','trip','user','write'])]
     private ?string $avatar = null;
 
     #[ORM\Column(nullable: true)]
@@ -62,10 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Bike::class)]
     private Collection $bikes;
 
+    #[Groups(['user','write'])]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trip::class)]
     private Collection $trips;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Post::class)]
+    #[Groups(['user','write'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
     private Collection $posts;
 
     #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'rider_join')]

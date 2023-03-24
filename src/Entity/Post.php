@@ -5,8 +5,14 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['post']],
+    denormalizationContext: ['groups' => ['write','post']],
+)]
 class Post
 {
     #[ORM\Id]
@@ -15,15 +21,18 @@ class Post
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[Groups(['write','post','trip'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?Trip $trip = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['write','post','trip','user'])]
     private ?string $content = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['write','post','trip_post','user'])]
     private array $pictures = [];
 
     public function getId(): ?int

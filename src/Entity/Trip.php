@@ -7,36 +7,50 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['trip']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class Trip
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['write','trip','user'])]
     private ?int $id = null;
     
     #[ORM\Column(length: 255)]
+    #[Groups(['write','trip','user'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['write','trip','user'])]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['write','trip','user'])]
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['write','trip','user'])]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['write','trip','user'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'trips')]
+    #[Groups(['write','trip'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripSteps::class)]
     private Collection $tripSteps;
 
+    #[Groups(['write','trip'])]
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: Post::class)]
     private Collection $posts;
 
