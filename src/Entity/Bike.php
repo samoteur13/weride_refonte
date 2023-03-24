@@ -4,24 +4,35 @@ namespace App\Entity;
 
 use App\Repository\BikeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BikeRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['bike']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class Bike
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['write','bike'])]
     private ?int $id = null;
 
+    #[Groups([ 'write','bike'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['write','bike'])]
     #[ORM\Column]
     private ?int $power = null;
 
+    #[Groups(['write','bike'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img_bike = null;
 
+    #[Groups(['write','bike'])]
     #[ORM\ManyToOne(inversedBy: 'bikes')]
     private ?User $user = null;
 
