@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -15,15 +14,12 @@ class Post
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['object'])]
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    private ?User $user_id = null;
+    private ?User $user = null;
 
-    #[Groups(['object'])]
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    private ?Trip $trip_id = null;
+    private ?Trip $trip = null;
 
-    #[Groups(['string'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
@@ -35,26 +31,26 @@ class Post
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getTripId(): ?Trip
+    public function getTrip(): ?Trip
     {
-        return $this->trip_id;
+        return $this->trip;
     }
 
-    public function setTripId(?Trip $trip_id): self
+    public function setTrip(?Trip $trip): self
     {
-        $this->trip_id = $trip_id;
+        $this->trip = $trip;
 
         return $this;
     }

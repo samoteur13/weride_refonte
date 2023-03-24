@@ -66,8 +66,8 @@ class UserFixtures extends Fixture
                     for ($i4=0; $i4 < rand(1,4) ; $i4++) { 
                        $posts[$i4] = new Post();
                        $posts[$i4]->setContent( $faker->text());
-                       $posts[$i4]->setTripId($trips[$i2]);
-                       $posts[$i4]->setUserId($users[$i]);
+                       $posts[$i4]->setTrip($trips[$i2]);
+                       $posts[$i4]->setUser($users[$i]);
                        $manager->persist($posts[$i4]);
                     }
 

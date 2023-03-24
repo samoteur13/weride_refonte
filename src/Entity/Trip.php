@@ -37,7 +37,7 @@ class Trip
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: TripSteps::class)]
     private Collection $tripSteps;
 
-    #[ORM\OneToMany(mappedBy: 'trip_id', targetEntity: Post::class)]
+    #[ORM\OneToMany(mappedBy: 'trip', targetEntity: Post::class)]
     private Collection $posts;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rider_trips')]
@@ -169,7 +169,7 @@ class Trip
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->setTripId($this);
+            $post->setTrip($this);
         }
 
         return $this;
@@ -179,8 +179,8 @@ class Trip
     {
         if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($post->getTripId() === $this) {
-                $post->setTripId(null);
+            if ($post->getTrip() === $this) {
+                $post->setTrip(null);
             }
         }
 

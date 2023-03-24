@@ -54,8 +54,9 @@
 							<hr />
 						</ul>
 						<h4>Commentaire</h4>
+
 						{% for post in trip.posts %}
-							<h5>{{ post.userid.firstname }}</h5>
+							<h5>{{ post.user.firstname }}</h5>
 							<p>
 								{{post.content}}
 							</p>
