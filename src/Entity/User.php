@@ -70,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
     private Collection $posts;
 
+    #[Groups(['user','write'])]
     #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'rider_join')]
     private Collection $rider_trips;
 

@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 #[ApiResource(
@@ -28,10 +30,12 @@ class Trip
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd-m-Y'],[DateTimeNormalizer::TIMEZONE_KEY => 'h'])]
     #[Groups(['write','trip','user'])]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd-m-Y'],[DateTimeNormalizer::TIMEZONE_KEY => 'h'])]
     #[Groups(['write','trip','user'])]
     private ?\DateTimeInterface $end_date = null;
 
@@ -54,6 +58,7 @@ class Trip
     #[ORM\OneToMany(mappedBy: 'trip', targetEntity: Post::class)]
     private Collection $posts;
 
+    #[Groups(['write','trip'])]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'rider_trips')]
     private Collection $rider_join;
 
