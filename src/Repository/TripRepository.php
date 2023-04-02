@@ -39,6 +39,21 @@ class TripRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllRiderThanid(int $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT * FROM trip_user t
+            WHERE t.trip_id = :id
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['id' => $id]);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Trip[] Returns an array of Trip objects
 //     */
