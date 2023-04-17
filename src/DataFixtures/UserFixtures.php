@@ -9,10 +9,16 @@ use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 class UserFixtures extends Fixture
 {
+
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {   
         $faker = Faker\Factory::create('fr_FR');
@@ -21,48 +27,18 @@ class UserFixtures extends Fixture
         $posts = [];
 
             for ($i=0; $i < 5 ; $i++) { 
+                $email = $faker->email;
+
                 $users[$i] = new User();
-                $users[$i]->setEmail($faker->email);
+                $users[$i]->setEmail($email);
                 $users[$i]->setRoles([]);
                 $users[$i]->setFirstname($faker->firstname);
                 $users[$i]->setLastname($faker->lastName);
                 $users[$i]->setPseudo($faker->userName);
-                $users[$i]->setPassword($faker->password);
-
-                // for ($i2=0; $i2 < rand(1,2) ; $i2++) { 
-                //     $trips[$i2] = new Trip() ;
-                //     $trips[$i2]->setTitle($faker->name) ;
-                //     $trips[$i2]->setStartDate($faker->dateTime()) ;
-                //     $trips[$i2]->setEndDate($faker->dateTime()) ;
-                //     $trips[$i2]->setType($type[rand(0,2)]);
-                //     $trips[$i2]->setDescription( $faker->text()) ;
-                //     $trips[$i2]->setUser($users[$i]) ;
-
-                //     for ($i3=0; $i3 < rand(1,4) ; $i3++) { 
-                //         $trips[$i2]->addRiderJoin($users[$i]) ;
-                //     }
-
-                //     $manager->persist( $trips[$i2]);
-                    
-                //     for ($i4=0; $i4 < rand(1,4) ; $i4++) { 
-                //        $posts[$i4] = new Post();
-                //        $posts[$i4]->setContent( $faker->text());
-                //        $posts[$i4]->setTrip($trips[$i2]);
-                //        $posts[$i4]->setUser($users[$i]);
-                //        $manager->persist($posts[$i4]);
-                //     }
-
-                //     for ($i5=0; $i5 < rand(2,3) ; $i5++) { 
-                //         $trip_steps[$i5] = new TripSteps;
-                //         $trip_steps[$i5]->setCity($faker->city);
-                //         $trip_steps[$i5]->setAdditionalAdress($faker->streetAddress);
-                //         $trip_steps[$i5]->setLongitude(0.0);
-                //         $trip_steps[$i5]->setLatitude(0.0);
-                //         $trip_steps[$i5]->setTrip($trips[$i2]);
-                //         $manager->persist($trip_steps[$i5]);
-                //     }
-
-                // }
+                $users[$i]->setPassword($this->passwordHasher->hashPassword(
+                    $users[$i],
+                    $email
+                ));
 
 
                 $manager->persist($users[$i]);
