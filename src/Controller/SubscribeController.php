@@ -18,9 +18,6 @@ class SubscribeController extends AbstractController
         
      
         $user = new User();
-        $user->setRoles( [
-            "ROLE_USER"
-        ]);
         $form = $this->createForm(UserFormType::class,$user);
 
         //handleRequest va faire matcher les element la class user pour les ajouter
@@ -29,7 +26,7 @@ class SubscribeController extends AbstractController
         //si le formulaire est envoyer et valide
         if ($form->isSubmitted() && $form->isValid()) {
             dd($user);
-            $user = $form->getData();
+            // $user = $form->getData();
             $manager->persist($user);
             $manager->flush();
 
