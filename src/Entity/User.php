@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['user']],
+    normalizationContext: ['groups' => ['user', 'userProfil']],
     denormalizationContext: ['groups' => ['write']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -22,13 +22,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['userProfil'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write', 'userProfil'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['userProfil'])]
     private array $roles = [];
 
     /**
@@ -39,38 +41,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','user','write','trip'])]
+    #[Groups(['bike', 'user', 'write', 'trip', 'userProfil'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','trip','user','write'])]
+    #[Groups(['bike', 'trip', 'user', 'write', 'userProfil'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['bike','trip','user','write'])]
+    #[Groups(['bike', 'trip', 'user', 'write', 'userProfil'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['bike','trip','user','write'])]
+    #[Groups(['bike', 'trip', 'user', 'write', 'userProfil'])]
     private ?string $avatar = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write'])]
     private array $pictures = [];
 
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write'])]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Bike::class)]
     private Collection $bikes;
 
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write'])]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trip::class)]
     private Collection $trips;
 
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write'])]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
     private Collection $posts;
 
-    #[Groups(['user','write'])]
+    #[Groups(['user', 'write'])]
     #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'rider_join')]
     private Collection $rider_trips;
 

@@ -13,7 +13,17 @@ class AppUtilisateurController extends AbstractController
 {
 
     #[Route('/api/profil', methods: ['GET'])]
-    public function test(Request $request)
+    public function userProfil(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        return $this->json($user, JsonResponse::HTTP_OK, [], ['groups' => ['userProfil']]);
+    }
+
+    #[Route('/api/userInfos', methods: ['GET'])]
+    public function userAllInfos(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
